@@ -19,10 +19,10 @@ const port = 3000;
 
 app.use(express.json());
 
-// ✅ Serve files from the public directory
+//  this is where Serve files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ✅ Token file path
+// this is for Token file path
 const tokenFile = path.join(__dirname, 'token.json');
 
 // Make sure token.json exists
@@ -30,13 +30,13 @@ if (!fs.existsSync(tokenFile)) {
   fs.writeFileSync(tokenFile, JSON.stringify({}));
 }
 
-// ✅ GET token
+// this is to  GET token
 app.get('/token', (req, res) => {
   const token = JSON.parse(fs.readFileSync(tokenFile));
   res.json(token);
 });
 
-// ✅ POST token
+//  this is to POST token
 app.post('/token', (req, res) => {
   fs.writeFileSync(tokenFile, JSON.stringify(req.body));
   res.sendStatus(200);
