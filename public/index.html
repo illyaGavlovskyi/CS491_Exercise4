@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
   <title>Ping App</title>
   <style>
     body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; }
@@ -11,10 +10,16 @@
 <body>
   <h1>Ping App</h1>
   <button id="pingButton" disabled>Ping</button>
-
   <script>
     let myToken;
     const btn = document.getElementById("pingButton");
+
+    async function init() {
+      const userName = prompt("Enter your name:");
+      myToken = setToken(userName);
+      await putToken(myToken);  // Claim your slot
+      startPolling();
+    }
 
     function setToken(user) {
       const a = navigator.userAgent;
@@ -31,21 +36,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(token)
       });
-    }
-
-    async function getToken() {
-      const res = await fetch('/token');
-      return await res.json();
-    }
-
-    function isMyTurn(latestToken) {
-      return JSON.stringify(latestToken) !== JSON.stringify(myToken);
-    }
-
-    btn.addEventListener('click', async () => {
-      btn.disabled = true;
-      await putToken(myToken);
-    });
+    } 
 
     async function startPolling() {
       setInterval(async () => {
@@ -55,13 +46,20 @@
         }
       }, 1000);
     }
-
-    async function init() {
-      const userName = prompt("Enter your name:");
-      myToken = setToken(userName);
-      await putToken(myToken);  // Claim your slot
-      startPolling();
+    
+    async function getToken() {
+      const res = await fetch('/token');
+      return await res.json();
     }
+
+    function isMyTurn(latestToken) {
+      return JSON.stringify(latestToken) !== JSON.stringify(myToken);
+    }
+    
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      await putToken(myToken);
+    });
 
     init();
   </script>
