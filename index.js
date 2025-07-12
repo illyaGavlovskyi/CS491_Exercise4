@@ -8,26 +8,27 @@ app.use(express.json());
 
 app.use(express.static('public'));
 
-// Token file path
+// Path to the token file
 const tokenFile = path.join('token.json');
 
-// Make sure token.json exists
+// If no json create it with an empty JSON object
 if (!fs.existsSync(tokenFile)) {
   fs.writeFileSync(tokenFile, JSON.stringify({}));
 }
 
-// GET token
+// Read and return as josn a GET request
 app.get('/token', (req, res) => {
   const token = JSON.parse(fs.readFileSync(tokenFile));
   res.json(token);
 });
 
-// POST token
+// Writes the token.json file
 app.post('/token', (req, res) => {
   fs.writeFileSync(tokenFile, JSON.stringify(req.body));
   res.sendStatus(200);
 });
 
+// Start the server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
