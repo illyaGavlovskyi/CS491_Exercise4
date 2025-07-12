@@ -3,8 +3,8 @@
 <head>
   <title>Ping App</title>
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; }
-    button { padding: 20px; font-size: 20px; }
+    body { text-align: center; margin: 100px; }
+    button { padding: 10px; font-size: 25px; }
   </style>
 </head>
 <body>
@@ -53,7 +53,7 @@
     }
 
     function isMyTurn(latestToken) {
-      return JSON.stringify(latestToken) !== JSON.stringify(myToken);
+      return latestToken.user !== myToken.user || latestToken.browser !== myToken.browser;
     }
     
     btn.addEventListener('click', async () => {
